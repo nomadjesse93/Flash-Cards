@@ -1,0 +1,23 @@
+extends layout.pug
+block content
+           .container
+             h1(class="display-one text-center") Sandbox
+             .row
+               .mx-auto
+                 h2.text-center First Name
+                 .container 
+                   ul
+                     each name in sandboxNames
+                       if name.First
+                         li= name.First
+                       else
+                         li= 'Name unavailable'    
+               .mx-auto
+                 h2.text-center Last Name
+                 .container 
+                   ul
+                     each name in sandboxNames
+                       if name.Last
+                         li= name.Last
+                       else 
+                         li= 'Name unavailable'
