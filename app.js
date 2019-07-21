@@ -15,35 +15,11 @@ app.use(cookieParser());
 
 app.set('view engine', 'pug');
 
-app.get('/', function (req, res) {
-    const name = req.cookies.username;
-    name ? res.render('index', {
-        name
-    }) : res.redirect('hello');
-});
+const mainRoutes = require('./routes');
+const cardRoutes = require('./routes/cards')
 
-app.get('/cards', function (req, res) {
-
-    res.render('cards', {
-        prompt: "Who is buried in Grant's tomb?",
-        hint: "Think about who's tomb it is!"
-    });
-});
-
-app.get('/hello', (req, res) => {
-    const name = req.cookies.username
-    name ? res.redirect('/') : res.render('hello')
-});
-
-app.post('/hello', (req, res) => {
-    res.cookie('username', req.body.username)
-    res.redirect('/')
-});
-
-app.post('/goodbye', (req, res) => {
-    res.clearCookie('username')
-    res.redirect('hello')
-});
+app.use(mainRoutes);
+app.use('/cards', cardRoutes);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found')
@@ -52,10 +28,12 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    res.status(err.status);
-    res.render('error', {
-        error: err
-    });
+    res.locals.error = err;
+    if (err.status >= 100 && err.status < 600)
+        res.status(err.status);
+    else
+        res.status(500);
+    res.render('error');
 });
 
 app.listen(3000);
