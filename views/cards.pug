@@ -7,3 +7,9 @@ block content
               if hint
                p
                 i Hint: #{hint}
+            .row
+              div(class= "col-sm ml-3")   
+                a(href=`/cards/${id}?side=${sideToShow}`) #{otherSide}       
+              div(class='col-sm ml-3')
+                form(action='/cards', method='use')
+                  button(class='btn btn-primary btn-sm mb-2' type='submit') Random    

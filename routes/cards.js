@@ -7,12 +7,13 @@ const {
     cards
 } = data;
 
-
 router.get('/:id', function (req, res) {
 
-    const {
+    let {
         id
-    } = req.params;
+    } = req.params
+
+    res.locals.id = id;
 
     const {
         side
@@ -27,23 +28,31 @@ router.get('/:id', function (req, res) {
 
     const templateData = {
         text,
-        hint
+        id
     };
 
 
-
-    if (side === "question") {
-        res.render('cards', {
-            ...templateData
-        });
-    } else {
-        res.render('cards', {
-            text: templateData.text
-        });
+    if (side === 'question') {
+        templateData.sideToShow = 'answer';
+        templateData.otherSide = 'Answer';
+        templateData.hint = hint;
+    } else if (side === 'answer') {
+        templateData.sideToShow = 'question';
+        templateData.otherSide = 'Question';
     }
 
+    res.render('cards', templateData);
 
 
+});
+
+
+router.use(function (req, res, next) {
+    let id = res.locals.id;
+    if (!id) {
+        id = Math.floor(Math.random() * (cards.length - 0) + 0);
+        res.redirect(`/cards/${id}?side=question`)
+    }
 });
 
 
