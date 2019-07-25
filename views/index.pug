@@ -1,5 +1,9 @@
 extends layout.pug
 
 block content
-  section#content    
-    h2 Welcome, #{name}!
+  section#content   
+     div(class= "container pl-0")
+       div(class="row pr-4")
+         div(class= "col-md-3 text-center pr-3")  
+           form(action='/cards', method='use') 
+             button(href='/cards' class='btn btn-primary btn-md btn-block') Cards 

@@ -9,6 +9,7 @@ const {
 
 router.get('/:id', function (req, res) {
 
+
     let {
         id
     } = req.params
@@ -25,11 +26,21 @@ router.get('/:id', function (req, res) {
         hint
     } = cards[id];
 
+    const name = req.cookies.username;
 
     const templateData = {
         text,
-        id
+        id,
+        name
     };
+
+    if (!name) {
+        res.redirect('/hello')
+    }
+
+    if (side !== "question" && side !== 'answer') {
+        res.redirect(`/cards/${id}?side=question`)
+    }
 
 
     if (side === 'question') {
@@ -53,6 +64,7 @@ router.use(function (req, res, next) {
         id = Math.floor(Math.random() * (cards.length - 0) + 0);
         res.redirect(`/cards/${id}?side=question`)
     }
+
 });
 
 
